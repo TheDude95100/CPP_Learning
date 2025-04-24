@@ -1,7 +1,7 @@
 #include "raylib.h"
 int main(){
-    const int windowHeight{1080};
-    const int windowWidth{1920};
+    const int windowHeight{512};
+    const int windowWidth{380};
 
     InitWindow(windowWidth,windowHeight,"Dasher");
 
@@ -15,16 +15,17 @@ int main(){
     scarfyPos.x = windowWidth/2 - scarfyRec.width/2;
     scarfyPos.y = windowHeight - scarfyRec.height;
 
-    const int gravity{1};
+    const int gravity{1000};
 
     bool isInAir{};
 
-    const int jumpVel{-22};
+    const int jumpVel{-600};
 
     int velocity{0};
 
     SetTargetFPS(60);
     while(!WindowShouldClose()){
+        const float dT{GetFrameTime()};
         BeginDrawing();
         ClearBackground(WHITE);
 
@@ -35,16 +36,17 @@ int main(){
         }
         else 
         {
-                velocity += gravity;
+                velocity += gravity * dT;
         }
         if(IsKeyPressed(KEY_SPACE) && !isInAir)
         {
                 velocity += jumpVel;
                 isInAir = true;
         }
-        scarfyPos.y += velocity;
+        scarfyPos.y += velocity * dT;
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         EndDrawing();
     }
+    UnloadTexture(scarfy);
     CloseWindow();
 }
