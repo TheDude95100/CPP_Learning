@@ -5,8 +5,15 @@ int main(){
 
     InitWindow(windowWidth,windowHeight,"Dasher");
 
-    const int width{50};
-    const int height{80};
+    Texture2D scarfy = LoadTexture("textures/scarfy.png");
+    Rectangle scarfyRec;
+    scarfyRec.width = scarfy.width/6;
+    scarfyRec.height = scarfy.height;
+    scarfyRec.x = 0;
+    scarfyRec.y = 0;
+    Vector2 scarfyPos;
+    scarfyPos.x = windowWidth/2 - scarfyRec.width/2;
+    scarfyPos.y = windowHeight - scarfyRec.height;
 
     const int gravity{1};
 
@@ -14,7 +21,6 @@ int main(){
 
     const int jumpVel{-22};
 
-    int posY{windowHeight - height};
     int velocity{0};
 
     SetTargetFPS(60);
@@ -22,7 +28,7 @@ int main(){
         BeginDrawing();
         ClearBackground(WHITE);
 
-        if(posY >= windowHeight - height)
+        if(scarfyPos.y >= windowHeight - scarfyRec.height)
         {
                 velocity = 0;
                 isInAir = false;
@@ -36,8 +42,8 @@ int main(){
                 velocity += jumpVel;
                 isInAir = true;
         }
-        posY += velocity;
-        DrawRectangle(windowWidth/2, posY, width,height,RED);
+        scarfyPos.y += velocity;
+        DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         EndDrawing();
     }
     CloseWindow();
