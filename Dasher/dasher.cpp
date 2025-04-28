@@ -17,18 +17,6 @@ int main()
 
         // obstacles
         Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
-        AnimData neb1 {
-                {0.0, 0.0, nebula.width / 8, nebula.height / 8},
-                {windowWidth + 300, windowHeight - nebula.height / 8}, 
-                0, 
-                1.0/12.0, 
-                0.0};
-        AnimData neb2 {
-                {0.0, 0.0, nebula.width / 8, nebula.height / 8},
-                {windowWidth, windowHeight - nebula.height / 8}, 
-                 0, 
-                1.0/16.0, 
-                0.0};
 
         int nebVel{-200};
 
@@ -47,6 +35,12 @@ int main()
         const int jumpVel{-600};
 
         int velocity{0};
+
+        AnimData nebulae[3]{};
+
+        for(int i =0; i <3;i++){
+                nebulae[i] = {{0.0, 0.0, nebula.width / 8, nebula.height / 8},{windowWidth + i*300, windowHeight - nebula.height / 8},0,1.0/12.0,0.0};
+        }
 
         SetTargetFPS(60);
         while (!WindowShouldClose())
@@ -69,8 +63,7 @@ int main()
                         velocity += jumpVel;
                         isInAir = true;
                 }
-                neb1.pos.x += nebVel * dT;
-                neb2.pos.x += nebVel * dT;
+
                 scarfyData.pos.y += velocity * dT;
                 scarfyData.runningTime += dT;
                 // scarfy's
@@ -89,33 +82,21 @@ int main()
                 }
 
                 // nebula's
-                neb1.runningTime+= dT;
-                if (neb1.runningTime >= neb1.runningTime)
-                {
-                        neb1.runningTime = 0.0;
-                        neb1.rec.x = neb1.frame * neb1.rec.width;
-                        neb1.frame++;
-                        if (neb1.frame > 7)
+                for(int i =0; i < 3;i++){
+                        nebulae[i].pos.x += nebVel * dT;
+                        nebulae[i].runningTime+=dT;
+                        if(nebulae[i].runningTime >= nebulae[i].updateTime)
                         {
-                                neb1.frame = 0;
+                                nebulae[i].runningTime = 0.0;
+                                nebulae[i].rec.x = nebulae[i].frame * nebulae[i].rec.width;
+                                nebulae[i].frame++;
+                                if (nebulae[i].frame > 7)
+                                {
+                                        nebulae[i].frame = 0;
+                                }    
                         }
+                        DrawTextureRec(nebula,nebulae[i].rec, nebulae[i].pos, WHITE);
                 }
-
-                neb2.runningTime+= dT;
-                if (neb2.runningTime >= neb2.runningTime)
-                {
-                        neb2.runningTime = 0.0;
-                        neb2.rec.x = neb1.frame * neb2.rec.width;
-                        neb2.frame++;
-                        if (neb2.frame > 7)
-                        {
-                                neb2.frame = 0;
-                        }
-                }
-                // Draw obstacle
-                DrawTextureRec(nebula, neb1.rec, neb1.pos, WHITE);
-                DrawTextureRec(nebula, neb2.rec, neb2.pos, WHITE);
-
                 // Character Draw
                 DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
                 EndDrawing();
