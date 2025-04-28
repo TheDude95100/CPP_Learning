@@ -5,8 +5,17 @@ int main(){
 
     InitWindow(windowWidth,windowHeight,"Dasher");
 
+    //obstacles
+    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+    Rectangle nebRec{0.0, 0.0, nebula.width/8, nebula.height/8};
+    Vector2 nebPos{windowWidth, windowHeight - nebRec.height};
+
+    int nebVel{-600};
+
+    //Should be a proper class btw
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
     Rectangle scarfyRec;
+
     scarfyRec.width = scarfy.width/6;
     scarfyRec.height = scarfy.height;
     scarfyRec.x = 0;
@@ -46,25 +55,30 @@ int main(){
                 velocity += jumpVel;
                 isInAir = true;
         }
+        nebPos.x += nebVel *dT;
         scarfyPos.y += velocity * dT;
         runningTime += dT;
-
-        if(runningTime >= updateTime)
-        {
-                scarfyRec.x = animFrame * scarfyRec.width;
-                animFrame ++;
-                runningTime = 0.0;
-                if(animFrame > 5)
+        if(!isInAir){
+                if(runningTime >= updateTime)
                 {
-                        animFrame = 0;
-                } 
+                        scarfyRec.x = animFrame * scarfyRec.width;
+                        animFrame ++;
+                        runningTime = 0.0;
+                        if(animFrame > 5)
+                        {
+                                animFrame = 0;
+                        } 
+                }
         }
-        //Animation shit
-        
 
+        //Draw obstacle
+        DrawTextureRec(nebula,nebRec, nebPos, WHITE);
+
+        //Character Draw
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         EndDrawing();
     }
     UnloadTexture(scarfy);
+    UnloadTexture(nebula);
     CloseWindow();
 }
