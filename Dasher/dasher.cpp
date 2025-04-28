@@ -16,7 +16,10 @@ int main(){
     scarfyPos.y = windowHeight - scarfyRec.height;
 
     const int gravity{1000};
+    const float updateTime{1.0/12.0};
 
+    float runningTime{0};
+    int animFrame{0};
     bool isInAir{};
 
     const int jumpVel{-600};
@@ -44,6 +47,21 @@ int main(){
                 isInAir = true;
         }
         scarfyPos.y += velocity * dT;
+        runningTime += dT;
+
+        if(runningTime >= updateTime)
+        {
+                scarfyRec.x = animFrame * scarfyRec.width;
+                animFrame ++;
+                runningTime = 0.0;
+                if(animFrame > 5)
+                {
+                        animFrame = 0;
+                } 
+        }
+        //Animation shit
+        
+
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         EndDrawing();
     }
