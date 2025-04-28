@@ -13,6 +13,8 @@ int main()
         const int windowHeight{512};
         const int windowWidth{380};
 
+        const int numberOfNebula{3};
+
         InitWindow(windowWidth, windowHeight, "Dasher");
 
         // obstacles
@@ -36,9 +38,9 @@ int main()
 
         int velocity{0};
 
-        AnimData nebulae[3]{};
+        AnimData nebulae[numberOfNebula]{};
 
-        for(int i =0; i <3;i++){
+        for(int i =0; i <numberOfNebula;i++){
                 nebulae[i] = {{0.0, 0.0, nebula.width / 8, nebula.height / 8},{windowWidth + i*300, windowHeight - nebula.height / 8},0,1.0/12.0,0.0};
         }
 
@@ -82,7 +84,7 @@ int main()
                 }
 
                 // nebula's
-                for(int i =0; i < 3;i++){
+                for(int i =0; i < numberOfNebula;i++){
                         nebulae[i].pos.x += nebVel * dT;
                         nebulae[i].runningTime+=dT;
                         if(nebulae[i].runningTime >= nebulae[i].updateTime)
