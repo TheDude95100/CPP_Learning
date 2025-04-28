@@ -8,6 +8,20 @@ struct AnimData{
         float runningTime;
 };
 
+AnimData updateAnimeData(AnimData data, float deltaTime, int maxFrame){
+        data.runningTime+=deltaTime;
+        if(data.runningTime >= data.updateTime)
+        {
+                data.runningTime = 0.0;
+                data.rec.x = data.frame * data.rec.width;
+                data.frame++;
+                if (data.frame > maxFrame)
+                {
+                        data.frame = 0;
+                }    
+        }
+        return data;
+}
 int main()
 {
         const int windowHeight{512};
@@ -71,32 +85,13 @@ int main()
                 // scarfy's
                 if (!isInAir)
                 {
-                        if (scarfyData.runningTime >= scarfyData.updateTime)
-                        {
-                                scarfyData.rec.x = scarfyData.frame * scarfyData.rec.width;
-                                scarfyData.frame++;
-                                scarfyData.runningTime = 0.0;
-                                if (scarfyData.frame > 5)
-                                {
-                                        scarfyData.frame = 0;
-                                }
-                        }
+                        scarfyData = updateAnimeData(scarfyData, dT,5);
                 }
 
                 // nebula's
                 for(int i =0; i < numberOfNebula;i++){
                         nebulae[i].pos.x += nebVel * dT;
-                        nebulae[i].runningTime+=dT;
-                        if(nebulae[i].runningTime >= nebulae[i].updateTime)
-                        {
-                                nebulae[i].runningTime = 0.0;
-                                nebulae[i].rec.x = nebulae[i].frame * nebulae[i].rec.width;
-                                nebulae[i].frame++;
-                                if (nebulae[i].frame > 7)
-                                {
-                                        nebulae[i].frame = 0;
-                                }    
-                        }
+                        nebulae[i] = updateAnimeData(nebulae[i], dT, 7);
                         DrawTextureRec(nebula,nebulae[i].rec, nebulae[i].pos, WHITE);
                 }
                 // Character Draw
