@@ -22,6 +22,17 @@ AnimData updateAnimeData(AnimData data, float deltaTime, int maxFrame){
         }
         return data;
 }
+
+void DrawBackground(float* bgX, float dT, Texture2D background,int scale){
+        *bgX -= 20*dT;
+        if(*bgX <= -background.width*scale){
+                *bgX = 0.0;
+        }
+        Vector2 bg1Pos{*bgX,0.0};
+        DrawTextureEx(background,bg1Pos,0.0,scale,WHITE);
+        Vector2 bg2Pos{*bgX + background.width *scale, 0.0};
+        DrawTextureEx(background,bg2Pos,0.0,scale,WHITE);
+}
 int main()
 {
         const int windowHeight{380};
@@ -35,7 +46,6 @@ int main()
         Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
         int nebVel{-200};
-
 
 
         // Should be a proper class btw
@@ -52,8 +62,6 @@ int main()
 
         int velocity{0};
 
-        float bgX{0};
-
         Texture2D background = LoadTexture("textures/far-buildings.png");
         Texture2D buildings = LoadTexture("textures/back-buildings.png");
         Texture2D foreground = LoadTexture("textures/foreground.png");
@@ -65,20 +73,13 @@ int main()
         }
 
         SetTargetFPS(60);
+        float bgX{0};
         while (!WindowShouldClose())
         {
                 const float dT{GetFrameTime()};
                 BeginDrawing();
                 ClearBackground(WHITE);
-
-                bgX -= 20*dT;
-                if(bgX <= -background.width*2){
-                        bgX = 0.0;
-                }
-                Vector2 bg1Pos{bgX,0.0};
-                DrawTextureEx(background,bg1Pos,0.0,2.0,WHITE);
-                Vector2 bg2Pos{bgX + background.width *2, 0.0};
-                DrawTextureEx(background,bg2Pos,0.0,2.0,WHITE);
+                DrawBackground(&bgX,dT,background,2.0);
 
                 if (scarfyData.pos.y >= windowHeight - scarfyData.rec.height)
                 {
