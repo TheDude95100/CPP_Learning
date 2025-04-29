@@ -24,8 +24,8 @@ AnimData updateAnimeData(AnimData data, float deltaTime, int maxFrame){
 }
 int main()
 {
-        const int windowHeight{512};
-        const int windowWidth{380};
+        const int windowHeight{380};
+        const int windowWidth{512};
 
         const int numberOfNebula{3};
 
@@ -40,7 +40,7 @@ int main()
 
         // Should be a proper class btw
         Texture2D scarfy = LoadTexture("textures/scarfy.png");
-        AnimData scarfyData{{0.0, 0.0, scarfy.width / 6, scarfy.height},{ windowWidth /2 - scarfy.width / 12, windowHeight - scarfy.height},0,1.0/12.0,0.0};
+        AnimData scarfyData{{0.0, 0.0, scarfy.width / 6, scarfy.height},{ windowWidth /2 - scarfy.width / 12, windowHeight - scarfy.height},0,1.0/8.0,0.0};
 
 
 
@@ -51,6 +51,12 @@ int main()
         const int jumpVel{-600};
 
         int velocity{0};
+
+        float bgX{0};
+
+        Texture2D background = LoadTexture("textures/far-buildings.png");
+        Texture2D buildings = LoadTexture("textures/back-buildings.png");
+        Texture2D foreground = LoadTexture("textures/foreground.png");
 
         AnimData nebulae[numberOfNebula]{};
 
@@ -64,6 +70,15 @@ int main()
                 const float dT{GetFrameTime()};
                 BeginDrawing();
                 ClearBackground(WHITE);
+
+                bgX -= 20*dT;
+                if(bgX <= -background.width*2){
+                        bgX = 0.0;
+                }
+                Vector2 bg1Pos{bgX,0.0};
+                DrawTextureEx(background,bg1Pos,0.0,2.0,WHITE);
+                Vector2 bg2Pos{bgX + background.width *2, 0.0};
+                DrawTextureEx(background,bg2Pos,0.0,2.0,WHITE);
 
                 if (scarfyData.pos.y >= windowHeight - scarfyData.rec.height)
                 {
@@ -100,5 +115,8 @@ int main()
         }
         UnloadTexture(scarfy);
         UnloadTexture(nebula);
+        UnloadTexture(background);
+        UnloadTexture(buildings);
+        UnloadTexture(foreground);
         CloseWindow();
 }
