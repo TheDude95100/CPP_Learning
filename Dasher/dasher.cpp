@@ -23,8 +23,8 @@ AnimData updateAnimeData(AnimData data, float deltaTime, int maxFrame){
         return data;
 }
 
-void DrawBackground(float* bgX, float dT, Texture2D background,int scale){
-        *bgX -= 20*dT;
+void DrawBackground(float* bgX, float dT, Texture2D background,int scale, int scrollSpeed){
+        *bgX -= scrollSpeed*dT;
         if(*bgX <= -background.width*scale){
                 *bgX = 0.0;
         }
@@ -72,14 +72,22 @@ int main()
                 nebulae[i] = {{0.0, 0.0, nebula.width / 8, nebula.height / 8},{windowWidth + i*300, windowHeight - nebula.height / 8},0,1.0/12.0,0.0};
         }
 
+        float finishLine {nebulae[numberOfNebula - 1].pos.x};
+
         SetTargetFPS(60);
         float bgX{0};
+        float mgX{0};
+        float fgX{0};
+
+        bool collision{};
         while (!WindowShouldClose())
         {
                 const float dT{GetFrameTime()};
                 BeginDrawing();
                 ClearBackground(WHITE);
-                DrawBackground(&bgX,dT,background,2.0);
+                DrawBackground(&bgX,dT,background,2.0,20);
+                DrawBackground(&mgX,dT,buildings,2.0,40);
+                DrawBackground(&fgX,dT,foreground,2.0,80);
 
                 if (scarfyData.pos.y >= windowHeight - scarfyData.rec.height)
                 {
@@ -110,8 +118,41 @@ int main()
                         nebulae[i] = updateAnimeData(nebulae[i], dT, 7);
                         DrawTextureRec(nebula,nebulae[i].rec, nebulae[i].pos, WHITE);
                 }
+
+                finishLine += nebVel * dT;
+                for(AnimData nebula: nebulae){
+
+                        float padd{30};
+                        Rectangle nebRec{
+                                nebula.pos.x + padd,
+                                nebula.pos.y + padd,
+                                nebula.rec.width - 2 * padd ,
+                                nebula.rec.height - 2 * padd
+                        };
+                        
+                        Rectangle scarfRec{
+                                scarfyData.pos.x,
+                                scarfyData.pos.y,
+                                scarfyData.rec.width,
+                                scarfyData.rec.height
+                        };
+                        if(CheckCollisionRecs(nebRec,scarfRec)){
+                             collision = true;   
+                        }
+                }
+                if(collision){
+                        DrawText("Game Over!", windowWidth/4,windowHeight/2, 40, RED);
+                } 
+                else if (scarfyData.pos.x >= finishLine){
+
+                        DrawText("You Win!", windowWidth/4,windowHeight/2, 40, RED);
+                }
+                else {
+                        DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
+                }
+
                 // Character Draw
-                DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
+                
                 EndDrawing();
         }
         UnloadTexture(scarfy);
