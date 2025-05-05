@@ -1,7 +1,8 @@
-#include "raylib.h"
+
 
 #ifndef BASE_CHARACTER_H
 #define BASE_CHARACTER_H
+#include "raylib.h"
 class BaseCharacter{
 
     public:
@@ -13,9 +14,10 @@ class BaseCharacter{
     Rectangle GetCollisionRec();
 
     protected:
-    Texture2D texture{};
-    Texture2D idle{};
-    Texture2D run{};
+    Texture2D texture{LoadTexture("characters/knight_idle_spritesheet.png")};
+    Texture2D idle{LoadTexture("characters/knight_idle_spritesheet.png")};
+    Texture2D run{LoadTexture("characters/knight_run_spritesheet.png")};
+
     Vector2 screenPos{};
     Vector2 worldPos{};
     Vector2 worldPosLastFrame{};

@@ -8,17 +8,6 @@ Character::Character(int winWidth, int winHeight)
     screenPos = {static_cast<float>(winWidth) / 2.0f - scale * (0.5f * width),
                  static_cast<float>(winHeight) / 2.0f - scale * (0.5f * height)};
 }
-void Character::unloadTexture()
-{
-    UnloadTexture(texture);
-    UnloadTexture(idle);
-    UnloadTexture(run);
-}
-void Character::setScreenPos(int winWidth, int winHeight)
-{
-    screenPos = {(float)winWidth / 2.0f - scale * (0.5f * width / 6.0f),
-                 (float)winHeight / 2.0f - scale * (0.5f * height)};
-}
 void Character::tick(float deltaTime)
 {
     worldPosLastFrame = worldPos;
@@ -54,18 +43,4 @@ void Character::tick(float deltaTime)
     Rectangle source{frame * (float)texture.width / 6.f, 0.f, rightLeft * width, height};
     Rectangle dest{screenPos.x, screenPos.y, scale * width, scale * height};
     DrawTexturePro(texture, source, dest, Vector2{}, 0.f, WHITE);
-}
-
-void Character::undoMovement()
-{
-    worldPos = worldPosLastFrame;
-}
-
-Rectangle Character::GetCollisionRec(){
-    return Rectangle{
-        screenPos.x,
-        screenPos.y,
-        width * scale,
-        height * scale
-    };
 }
