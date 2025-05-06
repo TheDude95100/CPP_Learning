@@ -12,4 +12,5 @@ class Prop
         float scale{4.f};
         float width{texture.width*scale};
         float height{texture.height * scale};
+
 };

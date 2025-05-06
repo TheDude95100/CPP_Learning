@@ -8,10 +8,11 @@ class BaseCharacter{
     public:
     BaseCharacter();
     Vector2 getWorldPos() { return worldPos; }
-    void tick(float deltaTime);
+    virtual void tick(float deltaTime);
     void unloadTexture();
     void undoMovement();
     Rectangle GetCollisionRec();
+    virtual Vector2 getScreenPosition() = 0;
 
     protected:
     Texture2D texture{LoadTexture("characters/knight_idle_spritesheet.png")};
@@ -22,7 +23,10 @@ class BaseCharacter{
     Vector2 worldPos{};
     Vector2 worldPosLastFrame{};
 
-    const float speed{10.f};
+    float windowWidth{};
+    float windowHeigth{};
+    float speed{10.f};
+    Vector2 velocity{};
 
     float rightLeft{1.0f};
     float runningTime{};

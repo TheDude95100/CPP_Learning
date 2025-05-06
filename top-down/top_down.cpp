@@ -27,6 +27,8 @@ int main()
         LoadTexture("characters/goblin_run_spritesheet.png"));
 
     Character knight(windowWidth,windowHeight);
+
+    goblin.setTarget(&knight);
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
@@ -51,14 +53,13 @@ int main()
             }
         
         goblin.tick(dT);
+
         for(Prop prop: props){
+
                 if(CheckCollisionRecs(prop.GetCollisionRec(knight.getWorldPos()), knight.GetCollisionRec())){
                     knight.undoMovement();
                 }
             }
-
-        
-
         EndDrawing();
     }
     UnloadTexture(background);

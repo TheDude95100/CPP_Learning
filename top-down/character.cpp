@@ -1,46 +1,67 @@
 #include "character.h"
 #include "raymath.h"
-Character::Character(int winWidth, int winHeight)
+Character::Character(int winWidth, int winHeight) :
+    windowWidth(winWidth),
+    windowHeight(winHeight)
 {
     width = texture.width / maxFrames;
     height = texture.height;
-
-    screenPos = {static_cast<float>(winWidth) / 2.0f - scale * (0.5f * width),
-                 static_cast<float>(winHeight) / 2.0f - scale * (0.5f * height)};
+}
+Vector2 Character::getScreenPosition(){
+    return Vector2{
+        static_cast<float>(windowWidth) / 2.0f - scale * (0.5f * width),
+        static_cast<float>(windowHeight) / 2.0f - scale * (0.5f * height)};
 }
 void Character::tick(float deltaTime)
 {
-    worldPosLastFrame = worldPos;
-    Vector2 direction{};
+
     if (IsKeyDown(KEY_A))
-        direction.x -= 1;
+        velocity.x -= 1;
     if (IsKeyDown(KEY_D))
-        direction.x += 1;
+        velocity.x += 1;
     if (IsKeyDown(KEY_W))
-        direction.y -= 1;
+        velocity.y -= 1;
     if (IsKeyDown(KEY_S))
-        direction.y += 1;
-    if (Vector2Length(direction) != 0.0)
-    {
-        worldPos = Vector2Add(worldPos, Vector2Scale(Vector2Normalize(direction), speed));
+        velocity.y += 1;
+    BaseCharacter::tick(deltaTime);
 
-        direction.x < 0.f ? rightLeft = -1.f : rightLeft = 1.f;
-        texture = run;
-    }
-    else
+    //Draw Sword
+    Vector2 origin{};
+    Vector2 offset{};
+    float rotation{};
+    if(rightLeft > 0.f)
     {
-        texture = idle;
+        origin = {0.f, weapon.height * scale};
+        offset = {35.f,55.f};
+        weaponCollisionRec = {
+            getScreenPosition().x + offset.x,
+            getScreenPosition().y + offset.y - weapon.height*scale,
+            weapon.width * scale,
+            weapon.height * scale
+        };
+        rotation = 35.f;
+    }
+    else 
+    {
+        origin = {weapon.width * scale, weapon.height * scale};
+        offset = {25.f,55.f};
+        weaponCollisionRec = {
+            getScreenPosition().x + offset.x - weapon.width * scale,
+            getScreenPosition().y + offset.y - weapon.height * scale,
+            weapon.width * scale,
+            weapon.height * scale
+        };
+        rotation = -35.f;
     }
 
-    runningTime += deltaTime;
-    if (runningTime >= updateTime)
-    {
-        frame++;
-        runningTime = 0.f;
-        if (frame > maxFrames)
-            frame = 0;
-    }
-    Rectangle source{frame * (float)texture.width / 6.f, 0.f, rightLeft * width, height};
-    Rectangle dest{screenPos.x, screenPos.y, scale * width, scale * height};
-    DrawTexturePro(texture, source, dest, Vector2{}, 0.f, WHITE);
+    Rectangle source{0.f,0.f,static_cast<float>(weapon.width) *rightLeft,static_cast<float>(weapon.height)};
+    Rectangle dest{getScreenPosition().x + offset.x,getScreenPosition().y+offset.y, weapon.width * scale, weapon.height * scale};
+    DrawTexturePro(weapon,source, dest,origin, rotation, WHITE);
+    DrawRectangleLines(
+        weaponCollisionRec.x,
+        weaponCollisionRec.y,
+        weaponCollisionRec.width,
+        weaponCollisionRec.height,
+        RED
+    );
 }
