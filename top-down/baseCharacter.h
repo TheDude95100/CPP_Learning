@@ -15,6 +15,7 @@ class BaseCharacter{
     virtual Vector2 getScreenPosition() = 0;
     bool GetAlive(){return alive;};
     void SetAlive(bool statut){alive = statut;};
+    Vector2 GetVelocity(){return velocity;};
 
 
     protected:
