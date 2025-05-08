@@ -52,7 +52,7 @@ int main()
         else 
         {
             std::string knightHealth {"Health: "};
-            knightHealth.append(std::to_string(knight.GetHealth()));
+            knightHealth.append(std::to_string(knight.GetHealth()),0,5);
             DrawText(knightHealth.c_str(), 55.f,45.f,40, RED);
         }
         knight.tick(dT);
