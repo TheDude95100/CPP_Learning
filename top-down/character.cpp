@@ -14,7 +14,7 @@ Vector2 Character::getScreenPosition(){
 }
 void Character::tick(float deltaTime)
 {
-
+    if(!GetAlive()) return;
     if (IsKeyDown(KEY_A))
         velocity.x -= 1;
     if (IsKeyDown(KEY_D))
@@ -39,7 +39,7 @@ void Character::tick(float deltaTime)
             weapon.width * scale,
             weapon.height * scale
         };
-        rotation = 35.f;
+        rotation = IsMouseButtonDown(MOUSE_BUTTON_LEFT) ? 35.f : 0.f;
     }
     else 
     {
@@ -51,7 +51,7 @@ void Character::tick(float deltaTime)
             weapon.width * scale,
             weapon.height * scale
         };
-        rotation = -35.f;
+        rotation = IsMouseButtonDown(MOUSE_BUTTON_LEFT) ? -35.f : 0.f;
     }
 
     Rectangle source{0.f,0.f,static_cast<float>(weapon.width) *rightLeft,static_cast<float>(weapon.height)};

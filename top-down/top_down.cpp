@@ -60,6 +60,11 @@ int main()
                     knight.undoMovement();
                 }
             }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            if(CheckCollisionRecs(goblin.GetCollisionRec(), knight.GetWeaponCollisionRec())){
+                goblin.SetAlive(false);
+            }
+        };
         EndDrawing();
     }
     UnloadTexture(background);

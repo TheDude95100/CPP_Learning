@@ -26,6 +26,7 @@ Rectangle BaseCharacter::GetCollisionRec(){
 }
 
 void BaseCharacter::tick(float deltaTime){
+    if(!GetAlive())return;
     worldPosLastFrame = worldPos;
     runningTime += deltaTime;
     if (runningTime >= updateTime)

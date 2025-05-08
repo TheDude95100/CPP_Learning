@@ -13,6 +13,9 @@ class BaseCharacter{
     void undoMovement();
     Rectangle GetCollisionRec();
     virtual Vector2 getScreenPosition() = 0;
+    bool GetAlive(){return alive;};
+    void SetAlive(bool statut){alive = statut;};
+
 
     protected:
     Texture2D texture{LoadTexture("characters/knight_idle_spritesheet.png")};
@@ -36,6 +39,9 @@ class BaseCharacter{
     int frame{};
     const int maxFrames{6};
     const float updateTime{1.f / 12.f};
+
+    private:
+    bool alive{true};
 };
 
 #endif

@@ -8,6 +8,7 @@ public:
     Character(int winWidth, int winHeight);
     virtual void tick(float deltaTime) override;
     virtual Vector2 getScreenPosition() override;
+    Rectangle GetWeaponCollisionRec(){ return weaponCollisionRec;};
 private:
     int windowWidth{};
     int windowHeight{};
