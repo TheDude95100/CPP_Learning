@@ -3,6 +3,7 @@
 #include "character.h"
 #include "prop.h"
 #include "enemy.h"
+#include <string>
 
 int main()
 {
@@ -42,7 +43,18 @@ int main()
         for(Prop prop: props){
             prop.Render(knight.getWorldPos());
         }
-
+        if(!knight.GetAlive())
+        {
+            DrawText("Game Over!", 55.f,45.f,40,RED);
+            EndDrawing();
+            continue;
+        }
+        else 
+        {
+            std::string knightHealth {"Health: "};
+            knightHealth.append(std::to_string(knight.GetHealth()));
+            DrawText(knightHealth.c_str(), 55.f,45.f,40, RED);
+        }
         knight.tick(dT);
         if (knight.getWorldPos().x < 0.f ||
             knight.getWorldPos().y < 0.f ||

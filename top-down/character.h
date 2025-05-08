@@ -10,7 +10,7 @@ public:
     virtual Vector2 getScreenPosition() override;
     Rectangle GetWeaponCollisionRec(){ return weaponCollisionRec;};
     float GetHealth() const {return health;};
-    void takeDamage(float damage){health -= damage;};
+    void takeDamage(float damage){health -= damage; if(health <= 0.f) SetAlive(false);};
 private:
     int windowWidth{};
     int windowHeight{};
